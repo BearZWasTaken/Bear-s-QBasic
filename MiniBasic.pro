@@ -11,11 +11,13 @@ CONFIG += c++11
 SOURCES += \
     expression.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    statement.cpp
 
 HEADERS += \
     expression.h \
-    mainwindow.h
+    mainwindow.h \
+    statement.h
 
 FORMS += \
     mainwindow.ui

@@ -20,3 +20,20 @@ void MainWindow::on_cmdLineEdit_editingFinished()
 
     ui->CodeDisplay->append(cmd);
 }
+
+void MainWindow::on_btnLoadCode_clicked()
+{
+
+}
+
+void MainWindow::on_btnRunCode_clicked()
+{
+
+}
+
+void MainWindow::on_btnClearCode_clicked()
+{
+    ui->CodeDisplay->clear();
+    ui->textBrowser->clear();
+    ui->treeDisplay->clear();
+}

@@ -1,5 +1,7 @@
 #include "expression.h"
 
+#include "runtimecontext.h"
+
 ConstantExp::ConstantExp(const int value)
     : value(value) {}
 
@@ -19,7 +21,7 @@ IdentifierExp::IdentifierExp(const std::string name)
 
 int IdentifierExp::getValue(RuntimeContext* context) const
 {
-    //// return context->getIdentifierValue(name);
+    return context->getIdentifierValue(name);
 }
 
 std::string IdentifierExp::getSyntaxTree(int indent) const
@@ -50,7 +52,7 @@ int CompoundExp::getValue(RuntimeContext* context) const
     }
     catch (const char* errMsg)
     {
-        //// context报错
+        context->throwError(errMsg);
     }
 }
 

@@ -17,6 +17,9 @@ public:
 
 private slots:
     void on_cmdLineEdit_editingFinished();
+    void on_btnLoadCode_clicked();
+    void on_btnRunCode_clicked();
+    void on_btnClearCode_clicked();
 
 private:
     Ui::MainWindow *ui;

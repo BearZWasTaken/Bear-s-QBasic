@@ -2,3 +2,4 @@
 20 LET B = A * 2
 30 LET C = A / 5
 40 LET D = ((A + B) MOD (C ** 2)) - (A + B + C)
+50 PRINT D

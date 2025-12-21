@@ -14,7 +14,7 @@ public:
     RuntimeContext();
     int getIdentifierValue(const std::string& name) const;
     void setIdentifierValue(const std::string& name, const int value);
-    void throwError(const char* errMsg);
+    void throwError(const char* errMsg) const;
 };
 
 #endif // RUNTIMECONTEXT_H

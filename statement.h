@@ -12,7 +12,7 @@ class Statement
 public:
     virtual ~Statement() = default;
 
-    virtual void execute(ProgramManager& pm) = 0;
+    virtual void execute(ProgramManager* pm) = 0;
 };
 
 
@@ -22,7 +22,7 @@ public:
     std::string comment;
 
     RemStmt(const std::string comment);
-    void execute(ProgramManager& state) override;
+    void execute(ProgramManager* pm) override;
 };
 
 
@@ -34,7 +34,7 @@ public:
 
 public:
     LetStmt(const std::string varName, Expression* expression);
-    void execute(ProgramManager& state) override;
+    void execute(ProgramManager* pm) override;
 };
 
 
@@ -44,7 +44,7 @@ public:
     Expression* expression;
 
     PrintStmt(Expression* expression);
-    void execute(ProgramManager& state) override;
+    void execute(ProgramManager* pm) override;
 };
 
 
@@ -54,7 +54,7 @@ public:
     std::string varName;
 
     InputStmt(const std::string varName);
-    void execute(ProgramManager& state) override;
+    void execute(ProgramManager* pm) override;
 };
 
 
@@ -64,7 +64,7 @@ public:
     int targetLineIndex;
 
     GotoStmt(const int targetLineIndex);
-    void execute(ProgramManager& state) override;
+    void execute(ProgramManager* pm) override;
 };
 
 
@@ -89,7 +89,7 @@ private:
 
 public:
     IfStmt(Expression* leftExp, Expression* rightExp, const ComparisonType comp, const int targetLineIndex);
-    void execute(ProgramManager& state) override;
+    void execute(ProgramManager* pm) override;
 };
 
 
@@ -97,7 +97,7 @@ class EndStmt : public Statement
 {
 public:
     EndStmt();
-    void execute(ProgramManager& state) override;
+    void execute(ProgramManager* pm) override;
 };
 
 

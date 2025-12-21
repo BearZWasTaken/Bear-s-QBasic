@@ -114,22 +114,6 @@ std::vector<Expression::Token> Expression::tokenize(const std::string& expStr)
             continue;
         }
 
-        // identifier
-        if (std::isalpha(c) || c == '_')
-        {
-            currentToken += c;
-            i++;
-            while (i < len && (std::isalnum(expStr[i]) || expStr[i] == '_'))
-            {
-                currentToken += expStr[i];
-                i++;
-            }
-            i--;
-            tokens.push_back( {IDENTIFIER, currentToken} );
-            currentToken.clear();
-            continue;
-        }
-
         // operator
         if (c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')')
         {
@@ -167,6 +151,22 @@ std::vector<Expression::Token> Expression::tokenize(const std::string& expStr)
                 i += 2;
                 continue;
             }
+        }
+
+        // identifier
+        if (std::isalpha(c) || c == '_')
+        {
+            currentToken += c;
+            i++;
+            while (i < len && (std::isalnum(expStr[i]) || expStr[i] == '_'))
+            {
+                currentToken += expStr[i];
+                i++;
+            }
+            i--;
+            tokens.push_back( {IDENTIFIER, currentToken} );
+            currentToken.clear();
+            continue;
         }
 
         // error

@@ -22,10 +22,21 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_cmdLineEdit_editingFinished()
 {
-    QString cmd = ui->cmdLineEdit->text();
+    QString text = ui->cmdLineEdit->text();
+    if (!pm->isRunning())
+    {
+        ui->CodeDisplay->append(text);
+    }
+    else if (pm->isWaitingForInput())
+    {
+        QString valueStr;
+        if (text.startsWith(" ? "))
+            valueStr = text.mid(3);
+        else
+            valueStr = text;
+        pm->gotInput(valueStr.toInt());
+    }
     ui->cmdLineEdit->setText("");
-
-    ui->CodeDisplay->append(cmd);
 }
 
 void MainWindow::on_btnLoadCode_clicked()
@@ -50,6 +61,7 @@ void MainWindow::on_btnLoadCode_clicked()
     }
 
     ui->CodeDisplay->clear();
+    pm->clearCommand();
     int lineCount = 0;
     while (!fin.atEnd())
     {
@@ -65,7 +77,7 @@ void MainWindow::on_btnLoadCode_clicked()
 
 void MainWindow::on_btnRunCode_clicked()
 {
-
+    pm->runCode();
 }
 
 void MainWindow::on_btnClearCode_clicked()

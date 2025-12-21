@@ -7,6 +7,9 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+
+class ProgramManager;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -22,6 +25,7 @@ private slots:
     void on_btnClearCode_clicked();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
+    ProgramManager* pm;
 };
 #endif // MAINWINDOW_H

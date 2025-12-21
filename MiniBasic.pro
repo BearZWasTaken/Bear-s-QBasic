@@ -12,12 +12,14 @@ SOURCES += \
     expression.cpp \
     main.cpp \
     mainwindow.cpp \
+    programmanager.cpp \
     runtimecontext.cpp \
     statement.cpp
 
 HEADERS += \
     expression.h \
     mainwindow.h \
+    programmanager.h \
     runtimecontext.h \
     statement.h
 

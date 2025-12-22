@@ -9,10 +9,18 @@ class Expression;
 
 class Statement
 {
+private:
+    int executionCnt = 0;
+
 public:
     virtual ~Statement() = default;
 
-    virtual void execute(ProgramManager* pm) = 0;
+    virtual std::string getTreeDisplay(ProgramManager* pm) = 0;
+    void execute(ProgramManager* pm);
+    virtual void doExecute(ProgramManager* pm) = 0;
+    int getExecutionCnt();
+    void resetStats();
+    virtual void doResetStats() = 0;
 };
 
 
@@ -22,7 +30,9 @@ public:
     std::string comment;
 
     RemStmt(const std::string comment);
-    void execute(ProgramManager* pm) override;
+    std::string getTreeDisplay(ProgramManager* pm) override;
+    void doExecute(ProgramManager* pm) override;
+    void doResetStats() override;
 };
 
 
@@ -34,7 +44,9 @@ public:
 
 public:
     LetStmt(const std::string varName, Expression* expression);
-    void execute(ProgramManager* pm) override;
+    std::string getTreeDisplay(ProgramManager* pm) override;
+    void doExecute(ProgramManager* pm) override;
+    void doResetStats() override;
 };
 
 
@@ -44,7 +56,9 @@ public:
     Expression* expression;
 
     PrintStmt(Expression* expression);
-    void execute(ProgramManager* pm) override;
+    std::string getTreeDisplay(ProgramManager* pm) override;
+    void doExecute(ProgramManager* pm) override;
+    void doResetStats() override;
 };
 
 
@@ -54,7 +68,9 @@ public:
     std::string varName;
 
     InputStmt(const std::string varName);
-    void execute(ProgramManager* pm) override;
+    std::string getTreeDisplay(ProgramManager* pm) override;
+    void doExecute(ProgramManager* pm) override;
+    void doResetStats() override;
 };
 
 
@@ -64,7 +80,9 @@ public:
     int targetLineIndex;
 
     GotoStmt(const int targetLineIndex);
-    void execute(ProgramManager* pm) override;
+    std::string getTreeDisplay(ProgramManager* pm) override;
+    void doExecute(ProgramManager* pm) override;
+    void doResetStats() override;
 };
 
 
@@ -84,12 +102,16 @@ public:
     int targetLineIndex;
 
 private:
-    int true_cnt;
-    int false_cnt;
+    int trueCnt = 0;
+    int falseCnt = 0;
 
 public:
     IfStmt(Expression* leftExp, Expression* rightExp, const ComparisonType comp, const int targetLineIndex);
-    void execute(ProgramManager* pm) override;
+    std::string getTreeDisplay(ProgramManager* pm) override;
+    void doExecute(ProgramManager* pm) override;
+    int getTrueCnt();
+    int getFalseCnt();
+    void doResetStats() override;
 };
 
 
@@ -97,7 +119,9 @@ class EndStmt : public Statement
 {
 public:
     EndStmt();
-    void execute(ProgramManager* pm) override;
+    std::string getTreeDisplay(ProgramManager* pm) override;
+    void doExecute(ProgramManager* pm) override;
+    void doResetStats() override;
 };
 
 

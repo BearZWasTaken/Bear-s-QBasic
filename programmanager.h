@@ -37,14 +37,16 @@ public:
     void stopRunning();
     bool isRunning();
     bool isWaitingForInput();
-    int getIdentifierValue(const std::string& name) const;
+    int getVarValue(const std::string& name) const;
     int getExpressionValue(Expression* expression) const;
-    void setIdentifierValue(const std::string& name, Expression* expression);
+    int getVarUseCnt(const std::string& name) const;
+    void setVarValue(const std::string& name, Expression* expression);
     void println(const std::string& str);
     void runtimeError(const std::string& str);
     void inputVar(const std::string& varName);
     void gotInput(int value);
     void gotoLine(int targetLineIndex);
+    void generateSyntaxTree();
 };
 
 #endif // PROGRAMMANAGER_H

@@ -2,8 +2,15 @@
 
 RuntimeContext::RuntimeContext() {}
 
-int RuntimeContext::getIdentifierValue(const std::string& name) const
+void RuntimeContext::clear()
 {
+    varValues.clear();
+    varUseCnts.clear();
+}
+
+int RuntimeContext::getVarValue(const std::string& name)
+{
+    varUseCnts[name]++;
     auto it = varValues.find(name);
     if (it == varValues.end())
     {
@@ -12,9 +19,17 @@ int RuntimeContext::getIdentifierValue(const std::string& name) const
     return it->second;
 }
 
-void RuntimeContext::setIdentifierValue(const std::string& name, const int value)
+void RuntimeContext::setVarValue(const std::string& name, const int value)
 {
     varValues[name] = value;
+}
+
+int RuntimeContext::getVarUseCnt(const std::string& name) const
+{
+    auto it = varUseCnts.find(name);
+    if (it == varUseCnts.end())
+        return 0;
+    return it->second;
 }
 
 void RuntimeContext::throwError(const char* errMsg) const

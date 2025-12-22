@@ -309,7 +309,7 @@ IdentifierExp::IdentifierExp(const std::string name)
 
 int IdentifierExp::getValue(RuntimeContext* context) const
 {
-    return context->getIdentifierValue(name);
+    return context->getVarValue(name);
 }
 
 std::string IdentifierExp::getSyntaxTree(int indent) const

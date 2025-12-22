@@ -5,6 +5,7 @@
 #include "expression.h"
 
 #include <QTimer>
+#include <sstream>
 
 ProgramManager::ProgramManager(Ui::MainWindow* ui)
     : ui(ui) , context(new RuntimeContext) {}
@@ -22,6 +23,7 @@ ProgramManager::~ProgramManager()
 void ProgramManager::clearCommand()
 {
     statements.clear();
+    context->clear();
 }
 
 bool ProgramManager::addCommand(QString& command)
@@ -156,7 +158,9 @@ void ProgramManager::runCode()
     ui->textBrowser->clear();
     _isRunning = true;
     _isWaitingForInput = false;
-
+    context->clear();
+    for (auto& statement : statements)
+        statement.second->resetStats();
     curLineIter = statements.begin();
     continueRunning();
 }
@@ -181,14 +185,15 @@ void ProgramManager::continueRunning()
 void ProgramManager::stopRunning()
 {
     _isRunning = false;
+    generateSyntaxTree();
 }
 
 bool ProgramManager::isRunning() { return _isRunning; }
 bool ProgramManager::isWaitingForInput() { return _isWaitingForInput; }
 
-int ProgramManager::getIdentifierValue(const std::string& name) const
+int ProgramManager::getVarValue(const std::string& name) const
 {
-    return context->getIdentifierValue(name);
+    return context->getVarValue(name);
 }
 
 int ProgramManager::getExpressionValue(Expression* expression) const
@@ -196,9 +201,14 @@ int ProgramManager::getExpressionValue(Expression* expression) const
     return expression->getValue(context);
 }
 
-void ProgramManager::setIdentifierValue(const std::string& name, Expression* expression)
+int ProgramManager::getVarUseCnt(const std::string& name) const
 {
-    context->setIdentifierValue(name, expression->getValue(context));
+    return context->getVarUseCnt(name);
+}
+
+void ProgramManager::setVarValue(const std::string& name, Expression* expression)
+{
+    context->setVarValue(name, expression->getValue(context));
 }
 
 void ProgramManager::println(const std::string& str)
@@ -229,7 +239,7 @@ void ProgramManager::inputVar(const std::string& varName)
 void ProgramManager::gotInput(int value)
 {
     ui->textBrowser->insertPlainText(QString::number(value));
-    context->setIdentifierValue(varNameWaitingForInput, value);
+    context->setVarValue(varNameWaitingForInput, value);
     _isWaitingForInput = false;
     continueRunning();
 }
@@ -241,4 +251,16 @@ void ProgramManager::gotoLine(int targetLineIndex)
     {
         runtimeError("GOTO statement with a non-existed line index");
     }
+}
+
+void ProgramManager::generateSyntaxTree()
+{
+    std::stringstream res;
+
+    for (auto& statement : statements)
+    {
+        res << statement.first << " " << statement.second->getTreeDisplay(this);
+    }
+
+    ui->treeDisplay->setText(QString::fromStdString(res.str()));
 }

@@ -12,8 +12,10 @@ private:
 
 public:
     RuntimeContext();
-    int getIdentifierValue(const std::string& name) const;
-    void setIdentifierValue(const std::string& name, const int value);
+    void clear();
+    int getVarValue(const std::string& name);
+    void setVarValue(const std::string& name, const int value);
+    int getVarUseCnt(const std::string& name) const;
     void throwError(const char* errMsg) const;
 };
 

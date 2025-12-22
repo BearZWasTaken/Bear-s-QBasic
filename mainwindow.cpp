@@ -73,6 +73,7 @@ void MainWindow::on_btnLoadCode_clicked()
     }
 
     file.close();
+    pm->generateSyntaxTree();
 }
 
 void MainWindow::on_btnRunCode_clicked()

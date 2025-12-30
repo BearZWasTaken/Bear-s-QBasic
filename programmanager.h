@@ -17,7 +17,7 @@ class ProgramManager : public QObject
     Q_OBJECT
 
 private:
-    bool _isRunning = true;
+    bool _isRunning = false;
     bool _isWaitingForInput = false;
     std::string varNameWaitingForInput;
     std::_Rb_tree_iterator<std::pair<const int, Statement*>> curLineIter;
@@ -32,6 +32,7 @@ public:
     ~ProgramManager();
     void clearCommand();
     bool addCommand(QString& command);
+    void showCode();
     void runCode();
     void continueRunning();
     void stopRunning();

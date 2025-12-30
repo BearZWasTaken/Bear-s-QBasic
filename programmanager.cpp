@@ -140,16 +140,31 @@ bool ProgramManager::addCommand(QString& command)
         {
             new_statement = new EndStmt();
         }
+
+        else
+        {
+            throw "Unknown keyword";
+        }
     }
     catch (const char* errMsg)
     {
         errors[lineIndex] = std::string(errMsg);
+        statements.erase(lineIndex);
         qDebug() << "Caught error: " + std::string(errMsg);
         return false;
     }
 
+    new_statement->rawCodeWithIndex = command.toStdString();
     statements[lineIndex] = new_statement;
     return true;
+}
+
+void ProgramManager::showCode()
+{
+    std::stringstream res;
+    for (auto& statement : statements)
+        res << statement.second->rawCodeWithIndex << "\n";
+    ui->CodeDisplay->setText(QString::fromStdString(res.str()));
 }
 
 void ProgramManager::runCode()

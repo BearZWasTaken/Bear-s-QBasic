@@ -123,9 +123,9 @@ std::string IfStmt::getTreeDisplay(ProgramManager* pm)
     treeDisplay << leftExp->getSyntaxTree(4) << std::endl;
     switch (comp)
     {
-        case EQUAL: treeDisplay << "=" << std::endl; break;
-        case LESS_THAN: treeDisplay << "<" << std::endl; break;
-        case GREATER_THAN: treeDisplay << ">" << std::endl; break;
+        case EQUAL: treeDisplay << "    =" << std::endl; break;
+        case LESS_THAN: treeDisplay << "    <" << std::endl; break;
+        case GREATER_THAN: treeDisplay << "    >" << std::endl; break;
         default: treeDisplay << "???" << std::endl; break;
     }
     treeDisplay << rightExp->getSyntaxTree(4) << std::endl;

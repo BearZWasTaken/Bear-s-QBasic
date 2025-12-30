@@ -13,6 +13,7 @@ private:
     int executionCnt = 0;
 
 public:
+    std::string rawCodeWithIndex;
     virtual ~Statement() = default;
 
     virtual std::string getTreeDisplay(ProgramManager* pm) = 0;

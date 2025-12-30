@@ -26,6 +26,9 @@ void MainWindow::on_cmdLineEdit_editingFinished()
     if (!pm->isRunning())
     {
         ui->CodeDisplay->append(text);
+        pm->addCommand(text);
+        pm->showCode();
+        pm->generateSyntaxTree();
     }
     else if (pm->isWaitingForInput())
     {
@@ -68,12 +71,14 @@ void MainWindow::on_btnLoadCode_clicked()
         QString line = fin.readLine().trimmed();
         lineCount++;
 
-        ui->CodeDisplay->append(line);
         pm->addCommand(line);
     }
 
+    pm->showCode();
+
     file.close();
     pm->generateSyntaxTree();
+    ui->textBrowser->clear();
 }
 
 void MainWindow::on_btnRunCode_clicked()
@@ -86,4 +91,6 @@ void MainWindow::on_btnClearCode_clicked()
     ui->CodeDisplay->clear();
     ui->textBrowser->clear();
     ui->treeDisplay->clear();
+
+    pm->clearCommand();
 }

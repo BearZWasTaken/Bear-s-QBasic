@@ -58,8 +58,7 @@ bool ProgramManager::addCommand(QString& command)
             int eqPos = arguments.indexOf('=');
             if (eqPos == -1)
             {
-                errors[lineIndex] = "LET statement with no '='";
-                return false;
+                throw "LET statement with no '='";
             }
 
             QString varName = arguments.left(eqPos).trimmed();
@@ -67,14 +66,17 @@ bool ProgramManager::addCommand(QString& command)
 
             if (varName.isEmpty())
             {
-                errors[lineIndex] = "LET statement with no variable name";
-                return false;
+                throw "LET statement with no variable name";
+            }
+
+            if (!isValidVarName(varName.toStdString()))
+            {
+                throw "LET statement with invalid variable name";
             }
 
             if (expStr.isEmpty())
             {
                 qDebug() << "LET statement with no expression";
-                return false;
             }
 
             Expression* exp = Expression::newExpFromStr(expStr.toStdString());
@@ -103,8 +105,7 @@ bool ProgramManager::addCommand(QString& command)
             int thenPos = arguments.indexOf("THEN");
             if (thenPos == -1)
             {
-                errors[lineIndex] = "IF statement with no 'THEN'";
-                return false;
+                throw "IF statement with no 'THEN'";
             }
 
             QString ifCondition = arguments.left(thenPos).trimmed();
@@ -124,8 +125,7 @@ bool ProgramManager::addCommand(QString& command)
             }
             if (compOpPos == -1)
             {
-                errors[lineIndex] = "IF statement with no condition operator";
-                return false;
+                throw "IF statement with no condition operator";
             }
 
             QString leftExpStr = ifCondition.left(compOpPos).trimmed();
@@ -148,7 +148,7 @@ bool ProgramManager::addCommand(QString& command)
     }
     catch (const char* errMsg)
     {
-        errors[lineIndex] = std::string(errMsg);
+        // errors[lineIndex] = std::string(errMsg);
         statements.erase(lineIndex);
         qDebug() << "Caught error: " + std::string(errMsg);
         return false;
@@ -182,18 +182,25 @@ void ProgramManager::runCode()
 
 void ProgramManager::continueRunning()
 {
-    while (_isRunning && !_isWaitingForInput)
+    try
     {
-        auto tempLineIter = curLineIter;
-        if (curLineIter == statements.end())
+        while (_isRunning && !_isWaitingForInput)
         {
-            stopRunning();
-            break;
+            auto tempLineIter = curLineIter;
+            if (curLineIter == statements.end())
+            {
+                stopRunning();
+                break;
+            }
+            qDebug() << "Executing line #" + std::to_string(curLineIter->first);
+            curLineIter->second->execute(this);
+            if (curLineIter == tempLineIter)
+                ++curLineIter;
         }
-        qDebug() << "Executing line #" + std::to_string(curLineIter->first);
-        curLineIter->second->execute(this);
-        if (curLineIter == tempLineIter)
-            ++curLineIter;
+    }
+    catch(const char* errMsg)
+    {
+        runtimeError(std::string(errMsg));
     }
 }
 
@@ -278,4 +285,22 @@ void ProgramManager::generateSyntaxTree()
     }
 
     ui->treeDisplay->setText(QString::fromStdString(res.str()));
+}
+
+bool ProgramManager::isValidVarName(const std::string varName) const
+{
+    if (varName.empty())
+        return false;
+
+    if (!std::isalpha(varName[0]))
+        return false;
+
+    for (size_t i = 1; i < varName.length(); i++)
+    {
+        char c = varName[i];
+        if (!std::isalnum(c) && c != '_')
+            return false;
+    }
+
+    return true;
 }

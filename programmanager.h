@@ -25,7 +25,7 @@ private:
     Ui::MainWindow* ui;
     RuntimeContext* context;
     std::map<int, Statement*> statements;
-    std::map<int, std::string> errors;
+    // std::map<int, std::string> errors;
 
 public:
     ProgramManager(Ui::MainWindow* ui);
@@ -48,6 +48,9 @@ public:
     void gotInput(int value);
     void gotoLine(int targetLineIndex);
     void generateSyntaxTree();
+
+private:
+    bool isValidVarName(const std::string varName) const;
 };
 
 #endif // PROGRAMMANAGER_H

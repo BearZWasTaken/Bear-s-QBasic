@@ -82,7 +82,7 @@ std::string InputStmt::getTreeDisplay(ProgramManager* pm)
 {
     std::stringstream treeDisplay;
     treeDisplay << "INPUT " << getExecutionCnt() << std::endl;
-    treeDisplay << "    " << varName << " " << pm->getVarUseCnt(varName) << std::endl;
+    treeDisplay << "    " << varName << std::endl;
     return treeDisplay.str();
 }
 
@@ -129,6 +129,7 @@ std::string IfStmt::getTreeDisplay(ProgramManager* pm)
         default: treeDisplay << "???" << std::endl; break;
     }
     treeDisplay << rightExp->getSyntaxTree(4) << std::endl;
+    treeDisplay << "    " << targetLineIndex << std::endl;
     return treeDisplay.str();
 }
 

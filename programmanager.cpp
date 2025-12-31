@@ -182,11 +182,12 @@ void ProgramManager::runCode()
 
 void ProgramManager::continueRunning()
 {
+    auto tempLineIter = curLineIter;
     try
     {
         while (_isRunning && !_isWaitingForInput)
         {
-            auto tempLineIter = curLineIter;
+            tempLineIter = curLineIter;
             if (curLineIter == statements.end())
             {
                 stopRunning();
@@ -240,7 +241,8 @@ void ProgramManager::println(const std::string& str)
 
 void ProgramManager::runtimeError(const std::string& str)
 {
-    ui->textBrowser->append(QString::fromStdString("[Runtime Error] " + str));
+    int lineIndex = curLineIter->first;
+    ui->textBrowser->append(QString::fromStdString("[Runtime Error] At line " + std::to_string(lineIndex) + ": " + str));
     stopRunning();
 }
 
@@ -268,9 +270,11 @@ void ProgramManager::gotInput(int value)
 
 void ProgramManager::gotoLine(int targetLineIndex)
 {
+    auto tempLineIter = curLineIter;
     curLineIter = statements.find(targetLineIndex);
     if (curLineIter == statements.end())
     {
+        curLineIter = tempLineIter;
         runtimeError("GOTO statement with a non-existed line index");
     }
 }

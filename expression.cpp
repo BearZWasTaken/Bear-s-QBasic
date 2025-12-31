@@ -232,7 +232,7 @@ std::vector<Expression::Token> Expression::infixToPostfix(const std::vector<Expr
                     int curPrec = getOperationPrecedence(operationFromStr(value));
 
                     // 栈顶运算符优先级更高，或两个连着的"**"
-                    if (topPrec > curPrec || (topPrec == curPrec && operationFromStr(topOp.value) == POW))
+                    if (topPrec > curPrec || (topPrec == curPrec && operationFromStr(topOp.value) != POW))
                     {
                         res.push_back(topOp);
                         stack.pop();
